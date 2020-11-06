@@ -1,0 +1,13 @@
+.weather-container {
+  display: flex;
+  align-items: center;
+  .weather-time-img {
+    width: 28px;
+    height: 23px;
+    margin-right: 10px;
+  }
+  .weather-txt {
+    font-size: 13px;
+    margin-right: 8px;
+  }
+}

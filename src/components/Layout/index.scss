@@ -1,0 +1,45 @@
+:global {
+  .app-header {
+    background: #fff !important;
+    padding: 0 !important;
+    position: absolute !important;
+    z-index: 1 !important;
+    left: 0 !important;
+    right: 0 !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.app-container {
+  height: 100vh;
+  overflow: hidden;
+  background-color: #f5f5f5;
+}
+
+.app-content {
+  margin: 80px 16px 16px;
+  padding: 24px;
+  background: #fff;
+  height: calc(100vh - 64px);
+  overflow-x: hidden;
+}
+
+.trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+  &:hover {
+    color: #1890ff;
+  }
+}
+
+.header-right {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 24px;
+}

@@ -1,0 +1,60 @@
+.login-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  .login-video {
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    min-width: 100%;
+    min-height: 100%;
+    height: auto;
+    width: auto;
+    z-index: -11;
+    /*加滤镜*/
+    /*filter: blur(15px); //背景模糊设置 */
+    /*-webkit-filter: grayscale(100%);*/
+    /*filter:grayscale(100%); //背景灰度设置*/
+  }
+  .login-form-container {
+    position: absolute;
+    width: 300px;
+    height: 280px;
+    top: 50%;
+    right: 10%;
+    transform: translateY(-50%);
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+  .input-wrapper {
+    margin-bottom: 30px;
+    width: 100%;
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+  .login-btn {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(226, 127, 50, 0.8);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+    border-radius: 30px;
+    transition: all 0.3s;
+    &:hover {
+      cursor: pointer;
+      // background-color: rgba(209, 113, 39, 0.7);
+      background-color: rgba(226, 127, 50, 0.7);
+    }
+  }
+}
