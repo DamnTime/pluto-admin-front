@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Icon, message } from 'antd';
 import withRouter from 'umi/withRouter';
 import router from 'umi/router';
@@ -8,25 +8,26 @@ import { setValueBySession } from '@/utils/share';
 
 import style from './index.scss';
 
-type IFormValue = {
-  [prop: string]: any;
-};
-
 const Login = (props: any) => {
-  const formValue: IFormValue = {};
 
-  const handleChange = (value: string | number, type: string) => {
-    formValue[type] = value;
-  };
+  const accountInputRef = useRef<any>(null);
+
+  const pwdInputRef = useRef<any>(null);
 
   const handleClick = async () => {
-    if (!formValue.account) {
+    const account = accountInputRef.current.value;
+    const passWord = pwdInputRef.current.value;
+
+    if (!account) {
       return message.error('请输入账号');
     }
-    if (!formValue.passWord) {
+    if (!passWord) {
       return message.error('请输入密码');
     }
-    const res = await login(formValue);
+    const res = await login({
+      account,
+      passWord
+    });
 
     setValueBySession('userInfo', res, {
       expire: 1000 * 60 * 60,
@@ -44,10 +45,20 @@ const Login = (props: any) => {
       </video>
       <div className={style['login-form-container']}>
         <div className={style['input-wrapper']}>
-          <LoginInput type="text" placeholder="账号" id="account" onChange={handleChange} />
+          <LoginInput
+            ref={accountInputRef}
+            type="text"
+            placeholder="账号"
+            id="account"
+          />
         </div>
         <div className={style['input-wrapper']}>
-          <LoginInput type="password" placeholder="密码" id="passWord" onChange={handleChange} />
+          <LoginInput
+            ref={pwdInputRef}
+            type="password"
+            placeholder="密码"
+            id="passWord"
+          />
         </div>
         <div className={style['login-btn']} onClick={handleClick}>
           <Icon type="login" style={{ fontSize: '26px' }} />

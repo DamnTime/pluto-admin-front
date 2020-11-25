@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 
 import style from './index.scss';
 
@@ -9,7 +9,7 @@ interface ILoginInput {
   placeholder?: string;
 }
 
-const LoginInput = (props: ILoginInput) => {
+const LoginInput = (props: ILoginInput, ref: any) => {
   const { id, type, onChange, placeholder } = props;
 
   const [focus, setFocus] = useState<boolean>(false);
@@ -41,6 +41,7 @@ const LoginInput = (props: ILoginInput) => {
         onBlur={onBlur}
         onChange={e => handleChange(e, id)}
         id={id}
+        ref={ref}
       />
       {!value && (
         <label htmlFor={id} className={style['place-holder']}>
@@ -51,4 +52,6 @@ const LoginInput = (props: ILoginInput) => {
   );
 };
 
-export default LoginInput;
+const WrapperInput = forwardRef(LoginInput);
+
+export default WrapperInput;

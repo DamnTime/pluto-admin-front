@@ -1,6 +1,6 @@
 const server = {
   dev: '',
-  production: '上线记得改',
+  production: 'http://www.pluto1811.com:8000',
 };
 
 export default server;

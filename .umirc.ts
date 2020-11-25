@@ -1,4 +1,5 @@
 import { IConfig } from 'umi-types';
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
 // ref: https://umijs.org/config/
 const config: IConfig = {
@@ -7,6 +8,20 @@ const config: IConfig = {
   },
   history: 'hash',
   treeShaking: true,
+  chainWebpack: config => {
+    if (process.env.NODE_ENV === 'production') {
+      // 生产模式开启
+      const gzipList = ['js', 'css'];
+      config.plugin('compression-webpack-plugin').use(
+        new CompressionWebpackPlugin({
+          algorithm: 'gzip', // 指定生成gzip格式
+          test: new RegExp('\\.(' + gzipList.join('|') + ')$'), // 匹配哪些格式文件需要压缩
+          threshold: 10240, //对超过10k的数据进行压缩
+          minRatio: 0.6, // 压缩比例，值为0 ~ 1
+        }),
+      );
+    }
+  },
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     [
