@@ -20,6 +20,7 @@ const defaultConfig: IRquest = {
 
 class Request {
   static requestCount = 0;
+  static hasLoginTimeOut = false;
 
   axios: any;
 
@@ -105,21 +106,27 @@ class Request {
     const res = err.response || {};
     const status = res.status;
     const errorMsg = res.data?.msg;
-    
-    Modal.error({
-      title: '温馨提示',
-      content: `${ERROR_CODE[status+''] || errorMsg || '系统异常，请稍后重试! '}`,
-      onOk(){
-        if(status === 401){
-          router.replace({
-            pathname: '/login',
-            query: {
-              from: `${encodeURIComponent(window.location.hash.replace('#',''))}`,
-            },
-          });
-        }
-      },
-    });
+
+    const is401 = status === 401;
+    if(!Request.hasLoginTimeOut){
+      Modal.error({
+        title: '温馨提示',
+        content: `${ERROR_CODE[status+''] || errorMsg || '系统异常，请稍后重试! '}`,
+        onOk(){
+          if(is401){
+            Request.hasLoginTimeOut = false;
+            router.replace({
+              pathname: '/login',
+              query: {
+                from: `${encodeURIComponent(window.location.hash.replace('#',''))}`,
+              },
+            });
+            Promise.reject('token失效');
+          }
+        },
+      });
+    }
+    is401 && (Request.hasLoginTimeOut = true);
     this.handleDestroyLoading();
     return Promise.reject(err);
   }

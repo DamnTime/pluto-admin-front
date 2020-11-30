@@ -23,6 +23,18 @@ const menus: IMenus[] = [
     ],
   },
   {
+    path: '/categoryManage',
+    title: '分类管理',
+    icon: 'home',
+    children: [
+      {
+        path: '/categoryManage/articleCategory',
+        title: '文章分类',
+        icon: 'home',
+      },
+    ],
+  },
+  {
     path: '/articleManage',
     title: '文章管理',
     icon: 'home',

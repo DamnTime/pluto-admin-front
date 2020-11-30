@@ -27,7 +27,8 @@ const DrawerForm: React.FC<IDrawerProps> = props => {
 
   const superFormRef = useRef<any>(null);
 
-  const [detail, setDetail] = useState<any>({});
+  const detail = useRef<any>({});
+
 
   const formConfig: ISuperForm = {
     col: 12,
@@ -169,7 +170,7 @@ const DrawerForm: React.FC<IDrawerProps> = props => {
     const res = await getUserDetailApi({
       id,
     });
-    setDetail(res);
+    detail.current = res;
     superFormRef.current.setFieldsValue(res);
   };
 
@@ -177,12 +178,15 @@ const DrawerForm: React.FC<IDrawerProps> = props => {
     if (visible && drawerType !== 'add') {
       fetchDetail();
     }
+    if(drawerType === 'add'){
+      detail.current = {}
+    }
   }, [visible]);
 
   const handleSubmit = async (values: any, srouce: string) => {
     const api = drawerType === 'add' ? createUserApi : editUserApi;
     await api({
-      ...detail,
+      ...detail.current ?? {},
       ...values,
     });
     message.success('操作成功');

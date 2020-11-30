@@ -42,7 +42,7 @@ export const getRef = (intance: any = { current: {} }, funcs: string[] = []) => 
     console.error(`${funcName}不存在`);
   };
   const defaultFuncs = Object.create({});
-  const intances = Object.keys(intance.current);
+  const intances = Object.keys(intance.current ?? {});
   for (let index = 0; index < funcs.length; index += 1) {
     const element = funcs[index];
     if (intances.includes(element)) {

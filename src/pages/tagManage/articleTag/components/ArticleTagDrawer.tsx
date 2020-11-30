@@ -26,7 +26,8 @@ const ArticleTagDrawer: React.FC<IDrawerProps> = props => {
 
   const superFormRef = useRef<any>(null);
 
-  const [detail, setDetail] = useState<any>({});
+  const detail = useRef<any>({});
+
 
   const formConfig: ISuperForm = {
     formItemList: [
@@ -73,7 +74,7 @@ const ArticleTagDrawer: React.FC<IDrawerProps> = props => {
 
   const fetchDetail = async () => {
     const res = await getArticleTag(id);
-    setDetail(res);
+    detail.current = res;
     superFormRef.current.setFieldsValue(res);
   };
 
@@ -81,12 +82,15 @@ const ArticleTagDrawer: React.FC<IDrawerProps> = props => {
     if (visible && drawerType !== 'add') {
       fetchDetail();
     }
+    if(drawerType === 'add'){
+      detail.current = {}
+    }
   }, [visible]);
 
   const handleSubmit = async (values: any, srouce: string) => {
     const api = drawerType === 'add' ? createArticleTag : editArticleTag;
     await api({
-      ...detail,
+      ...detail.current ?? {},
       ...values,
     });
     message.success('操作成功');
