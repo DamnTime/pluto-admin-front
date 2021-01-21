@@ -8,41 +8,46 @@ const menus: IMenus[] = [
   {
     path: '/tagManage',
     title: '标签管理',
-    icon: 'home',
+    icon: 'tag',
     children: [
       {
         path: '/tagManage/userTag',
         title: '用户标签',
-        icon: 'home',
+        icon: 'schedule',
       },
       {
         path: '/tagManage/articleTag',
         title: '文章标签',
-        icon: 'home',
+        icon: 'tags',
       },
     ],
   },
   {
     path: '/categoryManage',
     title: '分类管理',
-    icon: 'home',
+    icon: 'appstore',
     children: [
       {
         path: '/categoryManage/articleCategory',
         title: '文章分类',
-        icon: 'home',
+        icon: 'cluster',
       },
     ],
   },
   {
     path: '/articleManage',
     title: '文章管理',
-    icon: 'home',
+    icon: 'form',
     children: [
       {
         path: '/articleManage/list',
         title: '文章列表',
-        icon: 'home',
+        icon: 'container',
+      },
+      {
+        path: '/articleManage/comment',
+        title: '文章评论',
+        icon: 'file',
       },
       {
         path: '/articleManage/create',
@@ -55,12 +60,12 @@ const menus: IMenus[] = [
   {
     path: '/systemManage',
     title: '系统管理',
-    icon: 'home',
+    icon: 'setting',
     children: [
       {
         path: '/systemManage/userManage',
         title: '用户管理',
-        icon: 'home',
+        icon: 'user',
       },
     ],
   },
