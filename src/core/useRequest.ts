@@ -28,6 +28,7 @@ class Request {
     this.axios = Axios.create({
       baseURL: rootApi[process.env.UMI_ENV],
       timeout: 30000,
+      withCredentials:true
     });
 
     this.axios.interceptors.request.use(
