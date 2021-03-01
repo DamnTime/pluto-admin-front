@@ -3,7 +3,7 @@ import Axios from 'axios';
 import router from 'umi/router';
 import RequestLoading from '@/components/RequestLoading';
 import { transformData, isEmpty } from '@/utils/share';
-import { dataType, getValueBySession } from '@/utils/share';
+import { dataType } from '@/utils/share';
 import IRquest from '@/interface/IRequest';
 import rootApi from '@/core/api';
 import {ERROR_CODE} from './enums';
@@ -68,14 +68,8 @@ class Request {
       requestLoading.show();
     }
     Request.requestCount += 1;
-    const userInfo = getValueBySession('userInfo', true) ?? {};
     
-
-    const headers = {
-      token: userInfo.token,
-    };
-    
-    config.headers = Object.assign({}, config.headers, headers);
+    config.headers = Object.assign({}, config.headers);
     /**
      * todo 设置token header
      * config.header = Object.assign({},config.header,header)

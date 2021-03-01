@@ -29,3 +29,7 @@ input {
   outline: none;
   border: 0;
 }
+
+.for-container.for-fullscreen {
+  z-index: 999 !important;
+}

@@ -1,17 +1,24 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import Editor from 'for-editor';
+import { Switch, message } from 'antd';
 import { customUploadRequest } from '@/utils/share';
 import { uploadHost } from '@/core/config';
 
 interface IEditor {
   value?: string;
   onChange?: (str: string) => void;
+  onAutoSave?: (str: string) => void;
 }
 
+const AUTO_SAVE_DEFAULT_VALUE = true;
+
 const FormEditor = (props: IEditor) => {
-  const { value = '', onChange, ...rest } = props;
+  const { value = '', onChange, onAutoSave, ...rest } = props;
 
   const forEditorRef = useRef<any>(null);
+
+  // 自动保存定时器
+  const autoSaveTimer = useRef<any>(null);
 
   const handleChange = (val: any) => {
     onChange && onChange(val);
@@ -27,11 +34,49 @@ const FormEditor = (props: IEditor) => {
     customUploadRequest({ info, prefix: 'forEditor' });
   };
 
+  // 点击保存
+  const handleSave = () => {
+    if (typeof onAutoSave === 'function' && value) {
+      onAutoSave(value);
+      message.success('保存成功');
+    }
+  };
+
+  // 设置自动保存
+  const setAutoSave = () => {
+    autoSaveTimer.current = setInterval(() => {
+      handleSave();
+    }, 1000 * 60 * 15);
+  };
+
+  // 清除自动保存定时器
+  const clearAutoSaveTimer = () => {
+    autoSaveTimer.current && clearInterval(autoSaveTimer.current);
+  };
+
+  const handleCheckedChange = (checked: boolean) => {
+    if (checked) {
+      setAutoSave();
+    } else {
+      clearAutoSaveTimer();
+    }
+  };
+
+  useEffect(() => {
+    if (AUTO_SAVE_DEFAULT_VALUE) {
+      setAutoSave();
+    }
+    return () => {
+      clearAutoSaveTimer();
+    };
+  }, []);
+
   const editorProps = {
     value,
     onChange: handleChange,
     ...rest,
     addImg: handleAddImg,
+    onSave: handleSave,
     toolbar: {
       h1: true, // h1
       h2: true, // h2
@@ -45,13 +90,23 @@ const FormEditor = (props: IEditor) => {
       /* v0.0.9 */
       undo: true, // 撤销
       redo: true, // 重做
-      save: false, // 保存
+      save: true, // 保存
       /* v0.2.3 */
       subfield: true, // 单双栏模式
     },
   };
 
-  return <Editor ref={forEditorRef} {...editorProps} />;
+  return (
+    <>
+      <Switch
+        checkedChildren="15m自动保存"
+        onChange={handleCheckedChange}
+        unCheckedChildren="关闭自动保存"
+        defaultChecked={AUTO_SAVE_DEFAULT_VALUE}
+      />
+      <Editor ref={forEditorRef} {...editorProps} />
+    </>
+  );
 };
 
 export default FormEditor;

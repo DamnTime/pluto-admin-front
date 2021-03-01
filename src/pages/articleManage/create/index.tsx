@@ -9,9 +9,12 @@ import SelectByApi from '@/components/SelectByApi';
 import FormEditor from '@/components/Editor';
 import {timeFormat} from '@/core/config';
 import { searchArticleCate, searchArticleTag } from '@/api/glabol';
+import { getValueBySession,setValueBySession } from '@/utils/share';
 import { createArticle, editArticle, getArticle } from '@/api/article';
 
 export type IdrawerType = 'check' | 'add' | 'edit';
+
+const EDITOR_CONTENT = 'articleContent';
 
 const ArticleManage: React.FC<any> = props => {
   const { location } = props;
@@ -29,8 +32,13 @@ const ArticleManage: React.FC<any> = props => {
     }
     res.publishTime = moment(res.publishTime);
     res.isEncrypt = !!res.isEncrypt;
+    res.content = getValueBySession(EDITOR_CONTENT,true) ?? res.content;
     superFormRef.current.setFieldsValue(res);
   };
+
+  const onAutoSave = (value:string)=>{
+    setValueBySession(EDITOR_CONTENT,value);
+  }
 
   useEffect(() => {
     setType(location.query?.type);
@@ -38,8 +46,15 @@ const ArticleManage: React.FC<any> = props => {
 
   useEffect(() => {
     const {id,type} = location.query;
-    if(id && type !== 'create'){
+    if(id && type !== 'add'){
       fetchDetail(id);
+    } else {
+      superFormRef.current.setFieldsValue({
+        content: getValueBySession(EDITOR_CONTENT,true) ?? ''
+      });
+    }
+    return ()=>{
+      window.sessionStorage.removeItem(EDITOR_CONTENT);
     }
   }, []);
 
@@ -162,7 +177,7 @@ const ArticleManage: React.FC<any> = props => {
             },
           ],
         },
-        render: <FormEditor />,
+        render: <FormEditor onAutoSave={onAutoSave}/>,
       },
       {
         type: 'radio',
