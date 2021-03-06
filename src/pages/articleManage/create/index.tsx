@@ -7,9 +7,9 @@ import { ISuperForm } from '@/interface/ISuperform';
 import SuperForm from '@/components/SuperForm';
 import SelectByApi from '@/components/SelectByApi';
 import FormEditor from '@/components/Editor';
-import {timeFormat} from '@/core/config';
+import {timeFormat,_login_time_out_temp_data} from '@/core/config';
 import { searchArticleCate, searchArticleTag } from '@/api/glabol';
-import { getValueBySession,setValueBySession } from '@/utils/share';
+import { getValueBySession,setValueBySession,getLoginTimeOutFormData } from '@/utils/share';
 import { createArticle, editArticle, getArticle } from '@/api/article';
 
 export type IdrawerType = 'check' | 'add' | 'edit';
@@ -24,16 +24,17 @@ const ArticleManage: React.FC<any> = props => {
   const superFormRef = useRef<any>(null);
 
 
-  const fetchDetail = async (id:number|string) => {
-    const res = await getArticle(id);
+  const fetchDetail = async (id:number|string,loginTimeOutData:any) => {
+    const result = await getArticle(id);
+    const res = {
+      ...result,
+      ...(loginTimeOutData ?? {})
+    }
     res.cate = {
       id:res.categoryId,
       name:res.categoryName
     }
-    res.publishTime = moment(res.publishTime);
-    res.isEncrypt = !!res.isEncrypt;
-    res.content = getValueBySession(EDITOR_CONTENT,true) ?? res.content;
-    superFormRef.current.setFieldsValue(res);
+    superFormRef.current.setFieldsValue(dealParams(res));
   };
 
   const onAutoSave = (value:string)=>{
@@ -45,18 +46,26 @@ const ArticleManage: React.FC<any> = props => {
   }, [location.query?.type]);
 
   useEffect(() => {
-    const {id,type} = location.query;
-    if(id && type !== 'add'){
-      fetchDetail(id);
-    } else {
-      superFormRef.current.setFieldsValue({
-        content: getValueBySession(EDITOR_CONTENT,true) ?? ''
-      });
-    }
-    return ()=>{
-      window.sessionStorage.removeItem(EDITOR_CONTENT);
-    }
+    fetchData()
   }, []);
+
+  const fetchData = async ()=>{
+    const {id,type} = location.query;
+    const loginTimeOutData = await getLoginTimeOutFormData();
+    if(id && type !== 'add'){
+      fetchDetail(id,loginTimeOutData);
+    } else {
+      if(loginTimeOutData){
+        superFormRef.current.setFieldsValue(dealParams(loginTimeOutData));
+      }
+    }
+  }
+
+  const dealParams = (data:any) =>{
+    data.publishTime = moment(data.publishTime);
+    data.isEncrypt = !!data.isEncrypt;
+    return data;
+  }
 
   const formConfig: ISuperForm = {
     labelCol: {

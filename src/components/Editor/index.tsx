@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import Editor from 'for-editor';
-import { Switch, message } from 'antd';
+import { message } from 'antd';
 import { customUploadRequest } from '@/utils/share';
 import { uploadHost } from '@/core/config';
 
@@ -10,15 +10,10 @@ interface IEditor {
   onAutoSave?: (str: string) => void;
 }
 
-const AUTO_SAVE_DEFAULT_VALUE = true;
-
 const FormEditor = (props: IEditor) => {
   const { value = '', onChange, onAutoSave, ...rest } = props;
 
   const forEditorRef = useRef<any>(null);
-
-  // 自动保存定时器
-  const autoSaveTimer = useRef<any>(null);
 
   const handleChange = (val: any) => {
     onChange && onChange(val);
@@ -41,35 +36,6 @@ const FormEditor = (props: IEditor) => {
       message.success('保存成功');
     }
   };
-
-  // 设置自动保存
-  const setAutoSave = () => {
-    autoSaveTimer.current = setInterval(() => {
-      handleSave();
-    }, 1000 * 60 * 15);
-  };
-
-  // 清除自动保存定时器
-  const clearAutoSaveTimer = () => {
-    autoSaveTimer.current && clearInterval(autoSaveTimer.current);
-  };
-
-  const handleCheckedChange = (checked: boolean) => {
-    if (checked) {
-      setAutoSave();
-    } else {
-      clearAutoSaveTimer();
-    }
-  };
-
-  useEffect(() => {
-    if (AUTO_SAVE_DEFAULT_VALUE) {
-      setAutoSave();
-    }
-    return () => {
-      clearAutoSaveTimer();
-    };
-  }, []);
 
   const editorProps = {
     value,
@@ -98,12 +64,6 @@ const FormEditor = (props: IEditor) => {
 
   return (
     <>
-      <Switch
-        checkedChildren="15m自动保存"
-        onChange={handleCheckedChange}
-        unCheckedChildren="关闭自动保存"
-        defaultChecked={AUTO_SAVE_DEFAULT_VALUE}
-      />
       <Editor ref={forEditorRef} {...editorProps} />
     </>
   );

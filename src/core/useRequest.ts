@@ -2,10 +2,11 @@ import { Modal } from 'antd';
 import Axios from 'axios';
 import router from 'umi/router';
 import RequestLoading from '@/components/RequestLoading';
-import { transformData, isEmpty } from '@/utils/share';
+import { transformData, isEmpty,setValueBySession } from '@/utils/share';
 import { dataType } from '@/utils/share';
 import IRquest from '@/interface/IRequest';
 import rootApi from '@/core/api';
+import {_login_time_out_temp_data} from '@/core/config';
 import {ERROR_CODE} from './enums';
 
 const requestLoading = RequestLoading();
@@ -15,6 +16,7 @@ const defaultConfig: IRquest = {
   showErrorModal: true,
   removeEmptyParams: true,
   contentType: 'json',
+  saveLoginTimeOutData: false
 };
 
 
@@ -101,6 +103,7 @@ class Request {
     const res = err.response || {};
     const status = res.status;
     const errorMsg = res.data?.msg;
+    
 
     const is401 = status === 401;
     if(!Request.hasLoginTimeOut){
@@ -109,6 +112,8 @@ class Request {
         content: `${ERROR_CODE[status+''] || errorMsg || '系统异常，请稍后重试! '}`,
         onOk(){
           if(is401){
+            // 登录失效时 存储接口数据 在某些填写大表单情况下 防止数据丢失
+            res.config.saveLoginTimeOutData && setValueBySession(_login_time_out_temp_data,JSON.parse(res.config.data ?? '{}') ?? res.config.params);
             Request.hasLoginTimeOut = false;
             router.replace({
               pathname: '/login',

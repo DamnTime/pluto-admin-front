@@ -11,6 +11,7 @@ export const getArticleList = (params: any) => {
 export const createArticle = (params: any) => {
   return useRequest.post('/admin/article', params, {
     showLoading: true,
+    saveLoginTimeOutData: true,
   });
 };
 
@@ -18,6 +19,7 @@ export const createArticle = (params: any) => {
 export const editArticle = (params: any) => {
   return useRequest.put(`/admin/article/${params.id}`, params, {
     showLoading: true,
+    saveLoginTimeOutData: true,
   });
 };
 

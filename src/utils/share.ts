@@ -2,6 +2,7 @@ import { ISession } from '@/interface/ISession';
 import dayjs from 'dayjs';
 import * as qiniu from 'qiniu-js';
 import rootApi from '@/core/api';
+import {_login_time_out_temp_data} from '@/core/config';
 import { getQiniuToken } from '@/api/upload';
 import { IComstomRequest } from '@/interface/IUpload';
 
@@ -57,7 +58,7 @@ export const getRef = (intance: any = { current: {} }, funcs: string[] = []) => 
 export const setValueBySession = (key: string, value: any, options: ISession = {}) => {
   if (value === undefined || value === null || dataType(value, 'function')) return;
   const defaultConfig = {
-    expire: 1000 * 60 * 60 * 24 * 30, // 默认过期时间为30天
+    expire: 1000 * 60 * 60 * 24 * 1, // 默认过期时间为30天
   };
 
   const mergeOptions = Object.assign({}, defaultConfig, options);
@@ -144,3 +145,12 @@ export const getWordCount = (text: string) => {
   } catch (error) {}
   return length;
 };
+
+ // 获取登录超时的表单数据
+ export const getLoginTimeOutFormData  = ()=>{
+   return new Promise((resolve)=>{
+      const loginTimeOutData = getValueBySession(_login_time_out_temp_data,true) ?? ''
+      resolve(loginTimeOutData);
+      window.sessionStorage.removeItem(_login_time_out_temp_data);
+   })
+ }
