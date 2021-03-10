@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Button, Tag, Popconfirm, message } from 'antd';
+import { Button, Tag, Popconfirm, message, Tooltip } from 'antd';
 import router from 'umi/router';
 import ListPage from '@/components/ListPage';
 import { ISuperForm } from '@/interface/ISuperform';
@@ -79,7 +79,10 @@ const ArticleList = (props: any) => {
       {
         title: '文章标题',
         key: 'title',
+        width: 180,
         fixed: 'left',
+        render: (h: string) =>
+          h.length > 8 ? <Tooltip title={h}>{h.substr(0, 8) + ' ...'}</Tooltip> : h,
       },
       {
         title: '封面图',

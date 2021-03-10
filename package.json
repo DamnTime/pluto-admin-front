@@ -11,6 +11,7 @@
   "dependencies": {
     "antd": "^3.19.5",
     "antd-img-crop": "^3.13.1",
+    "array-move": "^3.0.1",
     "axios": "^0.18.0",
     "dayjs": "^1.9.3",
     "dva": "^2.6.0-beta.6",
@@ -22,6 +23,7 @@
     "react": "^16.8.6",
     "react-color": "^2.18.1",
     "react-dom": "^16.8.6",
+    "react-sortable-hoc": "^1.11.0",
     "react-transition-group": "^4.4.1"
   },
   "devDependencies": {

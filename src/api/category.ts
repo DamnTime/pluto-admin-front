@@ -2,9 +2,13 @@ import useRequest from '@/core/useRequest';
 
 // 获取分类列表
 export const getCategoryList = () => {
-  return useRequest.get('/admin/category', {}, {
-    showLoading: true,
-  });
+  return useRequest.get(
+    '/admin/category',
+    {},
+    {
+      showLoading: true,
+    },
+  );
 };
 
 // 新增分类
@@ -31,6 +35,13 @@ export const deleteCategory = (id: any) => {
 // 分类详情
 export const getCategory = (id: any) => {
   return useRequest.get(`/admin/category/${id}`, null, {
+    showLoading: true,
+  });
+};
+
+// 更新sorts
+export const updateSorts = (params: any) => {
+  return useRequest.post('/admin/category-update-sorts', params, {
     showLoading: true,
   });
 };
