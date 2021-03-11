@@ -79,10 +79,10 @@ const ArticleList = (props: any) => {
       {
         title: '文章标题',
         key: 'title',
-        width: 180,
+        width: 200,
         fixed: 'left',
         render: (h: string) =>
-          h.length > 8 ? <Tooltip title={h}>{h.substr(0, 8) + ' ...'}</Tooltip> : h,
+          h.length > 10 ? <Tooltip title={h}>{h.substr(0, 10) + ' ...'}</Tooltip> : h,
       },
       {
         title: '封面图',
@@ -95,7 +95,9 @@ const ArticleList = (props: any) => {
       {
         title: '简介',
         key: 'subMessage',
-        render: (txt: any[]) => txt || '-',
+        width: 200,
+        render: (h: string) =>
+          !h ? '-' : h.length > 10 ? <Tooltip title={h}>{h.substr(0, 10) + ' ...'}</Tooltip> : h,
       },
       {
         title: '作者',
